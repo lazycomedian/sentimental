@@ -19,7 +19,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lazycomedian/sentimental-toolkit.git"
+    "url": "https://github.com/lazycomedian/sentimental.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "license": "MIT",
   "dependencies": {

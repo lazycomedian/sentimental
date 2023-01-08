@@ -1,7 +1,5 @@
 {
   "private": true,
-  "scripts": {
-    "package": "rm -rf ./lib && tsc -b ./tsconfig.build.json"
-  },
+  "scripts": {},
   "license": "MIT"
 }
