@@ -1,11 +1,12 @@
 {
+  "name": "sentimental",
   "private": true,
-  "scripts": {
-    "prettier": "prettier --write ."
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/lazycomedian/sentimental.git"
+  },
+  "scripts": {
+    "prettier": "prettier --write ."
   },
   "devDependencies": {
     "@types/nprogress": "^0.2.0",
