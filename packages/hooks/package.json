@@ -1,7 +1,7 @@
 {
-  "name": "@sentimental/toolkit",
-  "version": "0.1.1",
-  "description": "A sentimental javascript toolkit.",
+  "name": "@sentimental/hooks",
+  "version": "0.1.0",
+  "description": "A sentimental react hooks library.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
@@ -10,8 +10,9 @@
   "keywords": [
     "sentimental",
     "javascript",
-    "utils",
-    "toolkit"
+    "react",
+    "library",
+    "hooks"
   ],
   "files": [
     "es",
@@ -31,5 +32,12 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@sentimental/toolkit": "^0.1.0",
+    "ahooks": "^3.7.4"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
+  }
 }

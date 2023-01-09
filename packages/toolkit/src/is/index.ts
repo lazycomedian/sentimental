@@ -134,6 +134,13 @@ export function isDate(target: unknown): target is Date {
 }
 
 /**
+ * Whether the current operating environment is a browser
+ */
+export function isBrowser(): boolean {
+  return !!(typeof window !== "undefined" && window.document?.createElement);
+}
+
+/**
  * Is it an html element
  * @param target
  */

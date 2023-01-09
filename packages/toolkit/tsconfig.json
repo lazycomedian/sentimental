@@ -1,18 +1,7 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "moduleResolution": "node",
-    "jsx": "react",
-    "esModuleInterop": true,
-    "downlevelIteration": true,
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true,
-    "importHelpers": true,
     "rootDir": "src",
-    "outDir": "lib",
-    "declaration": true
-  },
-  "exclude": ["node_modules", "lib", "es", "dist", "example"]
+    "outDir": "lib"
+  }
 }

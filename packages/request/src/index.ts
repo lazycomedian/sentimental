@@ -1,12 +1,15 @@
+import { isNotEmpty, isObject, isUndefined } from "@sentimental/toolkit";
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import nProgress from "nprogress";
 import "nprogress/nprogress.css";
-import { isNotEmpty, isObject, isUndefined } from "../is";
-import { AxiosCanceler } from "./canceler";
+import { RequestCanceler } from "./canceler";
+import { HttpMethod } from "./constant";
 export * from "axios";
 export type { NProgressOptions } from "nprogress";
+export * from "./canceler";
+export * from "./constant";
 
-export interface BasicRequestConfig extends AxiosRequestConfig<undefined> {
+export interface RequestConfig extends AxiosRequestConfig<undefined> {
   /**
    * Automatically cancel repeated requests
    * you can set this property to false to allow repeated requests to be sent
@@ -20,8 +23,7 @@ export interface BasicRequestConfig extends AxiosRequestConfig<undefined> {
  * @augments C Http request configuration type
  * @augments D Default data type
  */
-export interface BasicRequestResponse<C extends BasicRequestConfig = BasicRequestConfig, D = any>
-  extends Omit<AxiosResponse<D>, "config"> {
+export interface RequestResponse<C extends RequestConfig = RequestConfig, D = any> extends Omit<AxiosResponse<D>, "config"> {
   config: C;
 }
 
@@ -30,12 +32,12 @@ export interface BasicRequestResponse<C extends BasicRequestConfig = BasicReques
  * @augments T Type of default configuration
  * @augments D Default data type
  */
-export class BasicRequest<T extends BasicRequestConfig = BasicRequestConfig, D = any> {
+export class Request<T extends RequestConfig = RequestConfig, D = any> {
+  /** The instance of the http request canceler */
+  protected readonly canceler: RequestCanceler = new RequestCanceler();
+
   /** The instance of the axios */
   private readonly axiosInstance: AxiosInstance;
-
-  /** The instance of the http request canceler */
-  protected readonly canceler: AxiosCanceler = new AxiosCanceler();
 
   /**
    * Initialize the Axios instance
@@ -56,7 +58,7 @@ export class BasicRequest<T extends BasicRequestConfig = BasicRequestConfig, D =
     nProgress.configure(this.nProgressConfigure());
 
     // Use http request interceptor
-    this.axiosInstance.interceptors.request.use((c: BasicRequestConfig) => {
+    this.axiosInstance.interceptors.request.use((c: RequestConfig) => {
       nProgress.start();
       // If there is an unfinished repeated request, cancel the repeated request first
       if (c.autoCancel || (isUndefined(c.autoCancel) && (config?.autoCancel ?? true))) {
@@ -70,11 +72,11 @@ export class BasicRequest<T extends BasicRequestConfig = BasicRequestConfig, D =
 
     // Use http response interceptor
     this.axiosInstance.interceptors.response.use(
-      (response: BasicRequestResponse) => {
+      (response: RequestResponse) => {
         nProgress.done();
         // After the request ends, remove this request
         this.canceler.remove(response.config);
-        return this.onFulfilledResponseInterceptor(<BasicRequestResponse<T>>response);
+        return this.onFulfilledResponseInterceptor(<RequestResponse<T>>response);
       },
       error => {
         nProgress.done();
@@ -117,7 +119,7 @@ export class BasicRequest<T extends BasicRequestConfig = BasicRequestConfig, D =
    * The callback for http response interceptor successful
    * @param response
    */
-  protected onFulfilledResponseInterceptor(response: BasicRequestResponse<T, D>): any {
+  protected onFulfilledResponseInterceptor(response: RequestResponse<T, D>): any {
     return response;
   }
 
@@ -171,17 +173,4 @@ export class BasicRequest<T extends BasicRequestConfig = BasicRequestConfig, D =
   public get delete() {
     return this.request(HttpMethod.DELETE);
   }
-}
-
-export enum HttpMethod {
-  GET = "GET",
-  POST = "POST",
-  PUT = "PUT",
-  DELETE = "DELETE",
-  OPTIONS = "OPTIONS",
-  HEAD = "HEAD",
-  PATCH = "PATCH",
-  PURGE = "PURGE",
-  LINK = "LINK",
-  UNLINK = "UNLINK"
 }

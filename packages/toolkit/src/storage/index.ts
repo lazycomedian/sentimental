@@ -1,4 +1,5 @@
-import { isNumber, isString, isUndefined } from "../is";
+import { typeName } from "../common";
+import { isBrowser, isNumber, isString, isUndefined } from "../is";
 import { Logger } from "../logger";
 
 type StorageType = "localStorage" | "sessionStorage";
@@ -52,7 +53,9 @@ export class Storage<K extends string = string, V = any> {
    *
    * @param option Configuration option of CacheStorage
    */
-  public constructor(private readonly option: StorageOption) {}
+  public constructor(private readonly option: StorageOption) {
+    if (!isBrowser()) throw new ReferenceError("The current running environment is not a browser");
+  }
 
   /** Get the default value of StorageType */
   protected get storageType(): StorageType {
@@ -116,7 +119,10 @@ export class Storage<K extends string = string, V = any> {
     const fullKey = this.getFullKey(key);
     try {
       const value = window[type].getItem(fullKey);
-      if (!isString(value)) throw new Error(`The stored value retrieved from ${type} by ${fullKey} is null`);
+      if (!isString(value)) {
+        console.warn(`[${this.logger.title || ""}] The storage value retrieved from ${type} by ${key} is ${typeName(value)}`);
+        return null;
+      }
       const { __EXPIRY__, __VALUE__ }: StorageValue<K, T> = JSON.parse(value);
 
       // Returns null if the data has expired and removes the data from storage

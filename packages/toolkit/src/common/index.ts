@@ -43,3 +43,12 @@ export function getStringByteLength(str: string): number {
   }
   return length;
 }
+
+/**
+ * Get the type of this target value
+ * @param target
+ */
+export function typeName(target: unknown): string {
+  const origin: string = Object.prototype.toString.call(target);
+  return origin.replace("[object ", "").replace("]", "");
+}

@@ -14,7 +14,7 @@ export class Logger {
    * The logger color log output, customized log
    * @param title The header title for the logger
    */
-  public constructor(private readonly title?: string) {}
+  public constructor(public readonly title?: string) {}
 
   /**
    * Get the corresponding color according to the log type

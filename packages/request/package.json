@@ -1,7 +1,7 @@
 {
-  "name": "@sentimental/toolkit",
-  "version": "0.1.1",
-  "description": "A sentimental javascript toolkit.",
+  "name": "@sentimental/request",
+  "version": "0.1.0",
+  "description": "A sentimental javascript request tool.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
@@ -10,8 +10,8 @@
   "keywords": [
     "sentimental",
     "javascript",
-    "utils",
-    "toolkit"
+    "request",
+    "axios"
   ],
   "files": [
     "es",
@@ -31,5 +31,10 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@sentimental/toolkit": "^0.1.0",
+    "axios": "^1.2.2",
+    "nprogress": "^0.2.0"
+  }
 }

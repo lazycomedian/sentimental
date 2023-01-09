@@ -1,8 +1,12 @@
-/dist/*
+dist
 .local
-/node_modules/**
+node_modules
+
+lib
+es
 
 **/*.svg
 **/*.sh
 
-/public/*
+public
+

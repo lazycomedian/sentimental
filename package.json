@@ -1,5 +1,23 @@
 {
   "private": true,
-  "scripts": {},
-  "license": "MIT"
+  "scripts": {
+    "prettier": "prettier --write ."
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lazycomedian/sentimental.git"
+  },
+  "devDependencies": {
+    "@types/nprogress": "^0.2.0",
+    "@types/react": "^18.0.26",
+    "del": "^6.0.0",
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "prettier": "^2.7.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^4.9.4"
+  }
 }
