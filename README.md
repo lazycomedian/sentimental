@@ -6,11 +6,11 @@
 </p>
 <div align="center">
 
-![npm](https://badgen.net/npm/v/@sentimental/toolkit)
-![Coverage Status](https://badgen.net/npm/dy/@sentimental/toolkit)
-![Install Size](https://badgen.net/packagephobia/install/@sentimental/toolkit)
-![commit](https://badgen.net/github/commits/lazycomedian/sentimental/main)
-![GitHub](https://badgen.net/github/license/lazycomedian/sentimental)
+[![npm](https://www.npmjs.com/package/@sentimental/toolkit)](https://badgen.net/npm/v/@sentimental/toolkit)
+[![Coverage Status](https://www.npmjs.com/package/@sentimental/toolkit)](https://badgen.net/npm/dy/@sentimental/toolkit)
+[![Install Size](https://www.npmjs.com/package/@sentimental/toolkit)](https://badgen.net/packagephobia/install/@sentimental/toolkit)
+[![commit](https://github.com/lazycomedian/sentimental)](https://badgen.net/github/commits/lazycomedian/sentimental/main)
+[![GitHub](https://github.com/lazycomedian/sentimental)](https://badgen.net/github/license/lazycomedian/sentimental)
 
 A javascript common business toolkit for personal development.
 
