@@ -6,14 +6,18 @@
     "url": "https://github.com/lazycomedian/sentimental.git"
   },
   "scripts": {
-    "prettier": "prettier --write ."
+    "init": "pnpm install && pnpm run build",
+    "clean": "rimraf node_modules",
+    "prettier": "prettier --write .",
+    "package": "pnpm -r --filter=./packages/** run build",
+    "release": "pnpm run build && pnpm -r --filter=./packages/* publish"
   },
   "devDependencies": {
     "@types/nprogress": "^0.2.0",
     "@types/react": "^18.0.26",
-    "del": "^6.0.0",
     "gulp": "^4.0.2",
     "gulp-clean": "^0.4.0",
+    "rimraf": "^3.0.2",
     "gulp-typescript": "^6.0.0-alpha.1",
     "prettier": "^2.7.1",
     "react": "^18.2.0",

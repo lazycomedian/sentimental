@@ -1,6 +1,6 @@
 import { Logger } from "../logger";
 
-type IsType =
+export type TypeName =
   | "String"
   | "Number"
   | "Array"
@@ -16,7 +16,12 @@ type IsType =
   | "Map"
   | "Set"
   | "Promise"
-  | "Proxy";
+  | "Proxy"
+  | "Arguments"
+  | "Error"
+  | "RegExp"
+  | "ArrayBuffer"
+  | "WeakMap";
 
 const logger = new Logger("SENTIMENTAL IS");
 
@@ -25,7 +30,7 @@ const logger = new Logger("SENTIMENTAL IS");
  * @param target
  * @param type Type of the target
  */
-export function is<T extends string = IsType>(target: unknown, type: T): boolean {
+export function is<T extends string = TypeName>(target: unknown, type: T): boolean {
   return Object.prototype.toString.call(target) === `[object ${type}]`;
 }
 
@@ -171,6 +176,14 @@ export function isNotEmpty<T extends any[] | Record<any, any>>(target: unknown):
   if (isMap(target) || isSet(target)) return target.size > 0;
   if (isObject(target)) return Object.keys(target).length > 0;
   return false;
+}
+
+/**
+ * Is it an empty collection
+ * @param target
+ */
+export function isEmpty(target: any[] | Record<any, any>): boolean {
+  return !isNotEmpty(target);
 }
 
 /**

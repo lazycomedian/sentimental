@@ -1,4 +1,3 @@
-import { useMemoizedFn } from "ahooks";
 import { useMemo, useState } from "react";
 
 export interface StateMap<K, V> extends Map<K, V> {
@@ -10,19 +9,19 @@ export interface StateMap<K, V> extends Map<K, V> {
 export const useStateMap = <K, V>(iterable?: Iterable<readonly [K, V]> | null): StateMap<K, V> => {
   const [stateMap, setStateMap] = useState(new Map(iterable));
 
-  const put = useMemoizedFn((key: K, value: V) => {
-    setStateMap(prev => new Map([...prev, [key, value]]));
-  });
-
-  const remove = useMemoizedFn((key: K) => {
-    setStateMap(prev => {
-      const m = new Map(prev);
-      m.delete(key);
-      return m;
-    });
-  });
-
-  const removeAll = useMemoizedFn(() => setStateMap(new Map()));
-
-  return useMemo(() => Object.assign(stateMap, { put, remove, removeAll }), [stateMap]);
+  return useMemo(
+    () =>
+      Object.assign(stateMap, {
+        put: (key: K, value: V) => setStateMap(prev => new Map([...prev, [key, value]])),
+        remove: (key: K) => {
+          setStateMap(prev => {
+            const m = new Map(prev);
+            m.delete(key);
+            return m;
+          });
+        },
+        removeAll: () => setStateMap(new Map())
+      }),
+    [stateMap]
+  );
 };

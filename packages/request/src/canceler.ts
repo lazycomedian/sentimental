@@ -1,5 +1,5 @@
 import { isExist } from "@sentimental/toolkit";
-import axios, { AxiosRequestConfig, Canceler } from "axios";
+import axios, { AxiosRequestConfig, Canceler as AxiosCanceler } from "axios";
 
 function stringify(data: Record<any, any>): string {
   if (!isExist(data)) return "";
@@ -8,8 +8,8 @@ function stringify(data: Record<any, any>): string {
     .join("&");
 }
 
-export class RequestCanceler {
-  protected readonly cancelers: Map<string, Canceler> = new Map();
+export class Canceler {
+  protected readonly cancelers: Map<string, AxiosCanceler> = new Map();
 
   /**
    * Get the serialized parameter path
@@ -27,7 +27,7 @@ export class RequestCanceler {
     // Before the request starts, check the previous request to cancel the operation
     this.remove(config);
 
-    const key = RequestCanceler.getPathKey(config);
+    const key = Canceler.getPathKey(config);
     if (!config.cancelToken && !this.cancelers.has(key)) {
       // 如果在集合中不存在当前请求，则添加
       const { token, cancel } = axios.CancelToken.source();
@@ -42,7 +42,7 @@ export class RequestCanceler {
    * @param config The configuration of Axios
    */
   public remove(config: AxiosRequestConfig): void {
-    const key = RequestCanceler.getPathKey(config);
+    const key = Canceler.getPathKey(config);
     if (this.cancelers.has(key)) this.cancelers.delete(key);
   }
 
@@ -52,7 +52,7 @@ export class RequestCanceler {
    * @param message Additional message when removing this request
    */
   public cancel(config: AxiosRequestConfig, message?: string) {
-    const key = RequestCanceler.getPathKey(config);
+    const key = Canceler.getPathKey(config);
     if (this.cancelers.has(key)) {
       const cancel = this.cancelers.get(key);
       cancel && cancel(message);

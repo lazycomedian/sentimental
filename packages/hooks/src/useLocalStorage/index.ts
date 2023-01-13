@@ -1,3 +1,3 @@
-import { createUseStorageState } from "../createUseStorage";
+import { createUseStorage } from "../createUseStorage";
 
-export { createUseStorageState };
+export const useLocalStorage = createUseStorage("localStorage");

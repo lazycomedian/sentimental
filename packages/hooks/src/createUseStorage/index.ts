@@ -1,80 +1,50 @@
-import { isFunction, isUndefined, Storage } from "@sentimental/toolkit";
-import { useMemoizedFn, useUpdateEffect } from "ahooks";
-import { useState } from "react";
+import { isFunction, isNull, isUndefined, Storage, StorageOption, StorageType } from "@sentimental/toolkit";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { PACKAGE_NAME } from "../utils";
 
-export interface IFuncUpdater<T> {
-  (previousState?: T): T;
-}
-export interface IFuncStorage {
-  (): Storage;
-}
-
-export interface Options<T> {
+export interface UseStorageOptions<T> extends Pick<StorageOption, "mode"> {
   serializer?: (value: T) => string;
   deserializer?: (value: string) => T;
-  defaultValue?: T | IFuncUpdater<T>;
+  defaultValue?: T | ((previousState?: T) => T);
+  expiration?: number;
 }
 
-export const createUseStorageState = (getStorage: () => Storage | undefined) => {
-  let storage: Storage | undefined;
+const name = PACKAGE_NAME.replace(" ", "_");
 
-  try {
-    storage = getStorage();
-  } catch (err) {
-    console.error(err);
-  }
+export const createUseStorage = (type: StorageType) => {
+  return <T>(key: string, options?: UseStorageOptions<T>) => {
+    const { serializer, deserializer, mode, expiration, defaultValue } = options || {};
 
-  return <T>(key: string, options?: Options<T>) => {
-    const serializer = (value: T) => {
-      if (options?.serializer) {
-        return options?.serializer(value);
-      }
-      return JSON.stringify(value);
-    };
+    const storage = useMemo(() => {
+      return new Storage({ name, type, mode, serializer, deserializer });
+    }, [mode, serializer, deserializer]);
 
-    const deserializer = (value: string) => {
-      if (options?.deserializer) {
-        return options?.deserializer(value);
-      }
-      return JSON.parse(value);
-    };
+    const getStoredValue = useCallback((): T | undefined => {
+      const value = storage.getItem(key);
+      if (!isNull(value)) return value;
+      return isFunction(defaultValue) ? defaultValue() : defaultValue;
+    }, [storage, defaultValue]);
 
-    function getStoredValue() {
-      try {
-        const raw = storage?.getItem(key);
-        if (raw) {
-          return deserializer(raw);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-      if (isFunction(options?.defaultValue)) {
-        return options?.defaultValue();
-      }
-      return options?.defaultValue;
-    }
+    const [state, setState] = useState(() => getStoredValue());
 
-    const [state, setState] = useState<T>(() => getStoredValue());
-
-    useUpdateEffect(() => {
+    useEffect(() => {
       setState(getStoredValue());
     }, [key]);
 
-    const updateState = (value: T | IFuncUpdater<T>) => {
-      const currentState = isFunction(value) ? value(state) : value;
-      setState(currentState);
+    const updateState = useCallback(
+      (value: T | ((previousState?: T) => T)): void => {
+        const currentState = isFunction(value) ? value(state) : value;
+        setState(currentState);
 
-      if (isUndefined(currentState)) {
-        storage?.removeItem(key);
-      } else {
-        try {
-          storage?.setItem(key, serializer(currentState));
-        } catch (e) {
-          console.error(e);
+        if (isUndefined(currentState)) {
+          storage.removeItem(key);
+        } else {
+          storage.setItem(key, currentState, expiration);
         }
-      }
-    };
+      },
+      [key, storage, expiration, state]
+    );
 
-    return [state, useMemoizedFn(updateState)] as const;
+    return <const>[state, updateState];
   };
 };

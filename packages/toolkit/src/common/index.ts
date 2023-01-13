@@ -1,4 +1,4 @@
-import { isExist } from "../is";
+import { isExist, TypeName } from "../is";
 
 /**
  * Assign object properties
@@ -46,9 +46,9 @@ export function getStringByteLength(str: string): number {
 
 /**
  * Get the type of this target value
- * @param target
+ * @param source
  */
-export function typeName(target: unknown): string {
-  const origin: string = Object.prototype.toString.call(target);
-  return origin.replace("[object ", "").replace("]", "");
+export function typeName<T extends string = TypeName>(source: unknown): T {
+  const origin: string = Object.prototype.toString.call(source);
+  return <T>origin.replace("[object ", "").replace("]", "");
 }
