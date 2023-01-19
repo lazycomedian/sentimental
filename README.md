@@ -12,7 +12,7 @@
 [![commit](https://badgen.net/github/commits/lazycomedian/sentimental/main)](https://github.com/lazycomedian/sentimental)
 [![GitHub](https://badgen.net/github/license/lazycomedian/sentimental)](https://github.com/lazycomedian/sentimental)
 
-A javascript common business toolkit for personal development.
+A javascript common toolkit for personal development.
 
 </div>
 

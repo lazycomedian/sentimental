@@ -54,7 +54,7 @@ export class Storage<K extends string = string> {
    * @param option Configuration option of CacheStorage
    */
   public constructor(private readonly option: StorageOption) {
-    if (!isBrowser()) throw new ReferenceError("The current running environment is not a browser");
+    if (!isBrowser()) throw new Error("The current running environment is not a browser");
   }
 
   /** Get the default value of StorageType */

@@ -19,7 +19,6 @@ export class Logger {
   /**
    * Get the corresponding color according to the log type
    * @param type The type of logger
-   * @default "default"
    */
   protected getColor(type: LoggerType = "default"): string {
     return Logger.builtInColor[type];
@@ -30,7 +29,6 @@ export class Logger {
    * @param title Title of the log , displayed in the grid on the left
    * @param desc Desc of the log , displayed in the grid on the right
    * @param type The type of logger
-   * @default "default"
    */
   protected capsule(title: string = "", desc: string = "", type?: LoggerType): void {
     console.log(
@@ -44,7 +42,6 @@ export class Logger {
   /**
    * Default log output format
    * @param type The type of logger
-   * @default "default"
    * @param message
    */
   public print(type: LoggerType, ...message: any[]): void {

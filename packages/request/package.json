@@ -1,13 +1,13 @@
 {
   "name": "@sentimental/request",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A sentimental javascript request tool.",
   "main": "./lib/index.js",
+  "module": "./es/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "gulp",
-    "clean": "rimraf node_modules",
-    "release:patch": "npm version patch && npm run publish"
+    "clean": "rimraf node_modules"
   },
   "keywords": [
     "sentimental",
@@ -35,8 +35,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@sentimental/toolkit": "^0.1.3",
+    "@sentimental/toolkit": "workspace:*",
     "axios": "^1.2.2",
-    "nprogress": "^0.2.0"
+    "nprogress": "^0.2.0",
+    "qs": "^6.11.0"
+  },
+  "devDependencies": {
+    "@types/qs": "^6.9.7"
   }
 }

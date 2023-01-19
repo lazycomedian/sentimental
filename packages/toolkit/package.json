@@ -1,13 +1,13 @@
 {
   "name": "@sentimental/toolkit",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A sentimental javascript toolkit.",
   "main": "./lib/index.js",
+  "module": "./es/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "gulp",
-    "clean": "rimraf node_modules",
-    "release:patch": "npm version patch && npm run publish"
+    "clean": "rimraf node_modules"
   },
   "keywords": [
     "sentimental",
