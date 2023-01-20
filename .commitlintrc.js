@@ -1,3 +1,6 @@
+// @see: https://cz-git.qbenben.com/zh/guide
+/** @type {import('cz-git').UserConfig} */
+
 module.exports = {
   ignores: [commit => commit.includes("init")],
   extends: ["@commitlint/config-conventional"],
@@ -154,3 +157,5 @@ module.exports = {
     defaultSubject: ""
   }
 };
+
+// d
