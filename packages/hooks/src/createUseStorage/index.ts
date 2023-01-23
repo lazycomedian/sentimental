@@ -5,24 +5,24 @@ import { PACKAGE_NAME } from "../utils";
 export interface UseStorageOptions<T> extends Pick<StorageOption, "mode"> {
   serializer?: (value: T) => string;
   deserializer?: (value: string) => T;
-  defaultValue?: T | ((previousState?: T) => T);
+  defaultValue: T | ((previousState: T) => T);
   expiration?: number;
 }
 
 const name = PACKAGE_NAME.replace(" ", "_");
 
 export const createUseStorage = (type: StorageType) => {
-  return <T>(key: string, options?: UseStorageOptions<T>) => {
+  return <T>(key: string, options: UseStorageOptions<T>) => {
     const { serializer, deserializer, mode, expiration, defaultValue } = options || {};
 
     const storage = useMemo(() => {
       return new Storage({ name, type, mode, serializer, deserializer });
     }, [mode, serializer, deserializer]);
 
-    const getStoredValue = useCallback((): T | undefined => {
+    const getStoredValue = useCallback((): T => {
       const value = storage.getItem(key);
       if (!isNull(value)) return value;
-      return isFunction(defaultValue) ? defaultValue() : defaultValue;
+      return isFunction(defaultValue) ? defaultValue(state) : defaultValue;
     }, [storage, defaultValue]);
 
     const [state, setState] = useState(() => getStoredValue());
@@ -32,7 +32,7 @@ export const createUseStorage = (type: StorageType) => {
     }, [key]);
 
     const updateState = useCallback(
-      (value: T | ((previousState?: T) => T)): void => {
+      (value: T | ((previousState: T) => T)): void => {
         const currentState = isFunction(value) ? value(state) : value;
         setState(currentState);
 

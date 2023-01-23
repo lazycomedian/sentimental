@@ -10,7 +10,7 @@
     "clean": "rimraf node_modules",
     "prettier": "prettier --write .",
     "prepare": "husky install",
-    "commit": "git pull && git add -A && git-cz",
+    "cz": "git-cz",
     "package": "pnpm -r --filter=./packages/** run build",
     "release": "pnpm run build && pnpm -r --filter=./packages/* publish"
   },

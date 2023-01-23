@@ -78,7 +78,7 @@ export class Storage<K extends string = string> {
    */
   protected getFullKey(key: K): string {
     const mode = this.option.mode?.toUpperCase();
-    return [`@${this.option.name}`, mode ? `:${mode}` : "", "/", key].join("");
+    return [this.option.name, mode ? `:${mode}` : "", "/", key].join("");
   }
 
   /**

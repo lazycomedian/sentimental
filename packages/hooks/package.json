@@ -1,6 +1,6 @@
 {
   "name": "@sentimental/hooks",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "description": "A sentimental react hooks library.",
   "main": "./lib/index.js",
   "module": "./es/index.js",
