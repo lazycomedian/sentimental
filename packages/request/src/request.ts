@@ -1,6 +1,6 @@
 import { isBrowser, isNotEmpty, isObject, isUndefined } from "@sentimental/toolkit";
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import nProgress from "nprogress";
+import nProgress, { NProgress } from "nprogress";
 import "nprogress/nprogress.css";
 import { Canceler } from "./canceler";
 import { HttpMethod } from "./constant";
@@ -45,17 +45,21 @@ export class Request<T extends RequestConfig = RequestConfig, D = any> {
    * The server returns the information -> [intercept unified processing] -> the client JS gets the information
    *
    * @param config The http request configuration
+   * @param nprogress use nprogress configuration
    */
-  public constructor(private readonly config?: T) {
+  public constructor(private readonly config?: T, nprogress?: NProgress) {
     // Initialize the axios instance
     this.axiosInstance = axios.create(config);
 
     // Initialize this nprogress configuration
-    if (isBrowser()) nProgress.configure(this.nProgressConfigure());
+    if (isBrowser() && !nprogress) {
+      nprogress = nProgress;
+      nprogress.configure({ easing: "ease", speed: 500, showSpinner: true, trickleSpeed: 200, minimum: 0.3 });
+    }
 
     // Use http request interceptor
     this.axiosInstance.interceptors.request.use((c: RequestConfig) => {
-      nProgress.start();
+      nprogress?.start();
       // If there is an unfinished repeated request, cancel the repeated request first
       if (c.autoCancel || (isUndefined(c.autoCancel) && (config?.autoCancel ?? true))) {
         this.canceler.cancel(c);
@@ -69,30 +73,16 @@ export class Request<T extends RequestConfig = RequestConfig, D = any> {
     // Use http response interceptor
     this.axiosInstance.interceptors.response.use(
       (response: RequestResponse) => {
-        nProgress.done();
+        nprogress?.done();
         // After the request ends, remove this request
         this.canceler.remove(response.config);
         return this.onFulfilledResponseInterceptor(<RequestResponse<T>>response);
       },
       error => {
-        nProgress.done();
+        nprogress?.done();
         return this.onRejectedResponseInterceptor(error);
       }
     );
-  }
-
-  /**
-   * The default configuration of nprogress
-   * @returns nprogress configuration
-   */
-  protected nProgressConfigure(): Partial<nProgress.NProgressOptions> {
-    return {
-      easing: "ease",
-      speed: 500,
-      showSpinner: true,
-      trickleSpeed: 200,
-      minimum: 0.3
-    };
   }
 
   /**
